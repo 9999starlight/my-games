@@ -1,0 +1,44 @@
+// variables
+$blue: #3923fef1;
+$orangeGradient: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
+
+// mixins
+@mixin boxSize($width: false, $height: false, $maxWidth: false, $maxHeight: false, $minHeight: false) {
+  @if($width) {
+    width: $width;
+  }
+  @if($height) {
+    height: $height;
+  }
+  @if($maxWidth) {
+    max-width: $maxWidth;
+  }
+  @if($maxHeight) {
+    max-height: $maxHeight;
+  }
+  @if($minHeight) {
+    min-height: $minHeight;
+  }
+}
+
+@mixin alignment($display: false, $align: false, $justify: false, $justifyGrid: false, $direction: false) {
+  @if $display {
+    display: $display;
+  }
+
+  @if $align {
+    align-items: $align;
+  }
+
+  @if $justify {
+    justify-content: $justify;
+  }
+
+  @if $justifyGrid {
+    justify-items: $justifyGrid;
+  }
+
+  @if $direction {
+    flex-direction: $direction;
+  }
+}

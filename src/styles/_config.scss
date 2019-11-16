@@ -1,6 +1,18 @@
 // variables
+
+// colors
 $blue: #3923fef1;
-$orangeGradient: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
+$white: #fff;
+$blackLead: #333;
+$turquoise: turquoise;
+$yellow: yellow;
+$darkPurple: rgba(33, 21, 43, 0.82);
+// $orangeGradient: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
+
+// configs
+$shadowBox: 3px 3px 6px rgba(35, 35, 36, 0.47);
+$backConfig: no-repeat center center/cover;
+$sizes: 1, 1.5, 2, 3;
 
 // mixins
 @mixin boxSize($width: false, $height: false, $maxWidth: false, $maxHeight: false, $minHeight: false) {
@@ -21,7 +33,7 @@ $orangeGradient: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
   }
 }
 
-@mixin alignment($display: false, $align: false, $justify: false, $justifyGrid: false, $direction: false) {
+@mixin alignment($display: false, $align: false, $justify: false, $justifyGrid: false, $direction: false, $textAlign: false) {
   @if $display {
     display: $display;
   }
@@ -41,4 +53,56 @@ $orangeGradient: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
   @if $direction {
     flex-direction: $direction;
   }
+
+  @if $textAlign {
+    text-align: $textAlign;
+  }
 }
+
+// fonts
+@mixin fonts ($size: false, $color: false, $weight: false, $style: false, $family: false) {
+  @if $size {
+    font-size: $size;
+  }
+
+  @if $color {
+    color: $color;
+  }
+
+  @if $weight {
+    font-weight: $weight;
+  }
+
+  @if $style {
+    font-style: $style;
+  }
+
+  @if $family {
+    font-family: $family;
+  }
+}
+
+// padding & margin classes
+@each $size in $sizes {
+  .pd#{$size} {
+    padding: #{$size}rem;
+  }
+
+  .mg#{$size} {
+    margin: #{$size}rem;
+  }
+
+  .mgb#{$size} {
+    margin-bottom: #{$size}rem;
+  }
+
+  .mgt#{$size} {
+    margin-top: #{$size}rem;
+  }
+}
+
+@mixin background($filter, $url, $backConfig) {
+  background: $filter, $url $backConfig;
+}
+
+

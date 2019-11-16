@@ -1,1 +1,59 @@
 @import "config.scss";
+@import "keyframes.scss";
+
+// reset
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+  scroll-behavior: smooth;
+  list-style-type: none;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+a,
+button,
+input[type="button"] {
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+// utillity clases
+
+.flex {
+   display: flex;
+}
+
+.flexCenter {
+  justify-content: center;
+  align-items: center;
+}
+
+.block {
+  display: block;
+}
+
+.center {
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+}
+
+.btn {
+  height: 30px;
+  width: 80px;
+}
+@import "mediaQueries.scss";

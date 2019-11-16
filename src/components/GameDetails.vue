@@ -1,21 +1,22 @@
 <template>
   <div class="detailsContainer">
-    <h2>Game details</h2>
-    <div class="details">
+    <div v-if="getSingleGameDetail.name" class="details pd1">
       <img
         :src="getSingleGameDetail.image"
         alt="game image"
+        class="block"
       >
-      <h2>{{ getSingleGameDetail.name }}</h2>
-      <h2>Year: {{ getSingleGameDetail.year }}</h2>
-      <h4>Genre: {{ getSingleGameDetail.genre }}</h4>
-      <h4>Publishers: {{ getSingleGameDetail.publishers }}</h4>
-      <h4>Platforms: {{ getSingleGameDetail.platforms }}</h4>
-      <h4>Description: {{ getSingleGameDetail.description }}</h4>
-      <h4>Similar Games: {{ getSingleGameDetail.similarGames }}</h4>
-      <a :href="getSingleGameDetail.giantBombDetails" target="_blank">Giant Bomb Details</a>
-      <button>Add to my list</button>
+      <h2 class="mgb1">{{ getSingleGameDetail.name }}</h2>
+      <p class="mgb1"><strong>Year: </strong>{{ getSingleGameDetail.year }}</p>
+      <p class="mgb1"><strong>Genre: </strong>{{ getSingleGameDetail.genre }}</p>
+      <p class="mgb1"><strong>Publishers: </strong>{{ getSingleGameDetail.publishers }}</p>
+      <p class="mgb1"><strong>Platforms: </strong>{{ getSingleGameDetail.platforms }}</p>
+      <p class="mgb1"><strong>Description: </strong>{{ getSingleGameDetail.description }}</p>
+      <p class="mgb1"><strong>Similar Games: </strong>{{ getSingleGameDetail.similarGames }}</p>
+      <a :href="getSingleGameDetail.giantBombDetails" target="_blank" class="gbLink">Giant Bomb Details</a>
+      <button class="addBtn">Add to my list</button>
     </div>
+    <p v-else class = "noDetails">...</p>
   </div>
 </template>
 
@@ -30,4 +31,18 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.details {
+  @include alignment($textAlign: left);
+  img {
+    @include boxSize($height: auto, $width: 200px);
+    margin: 1rem auto;
+  }
+  strong {
+    color: lighten( $yellow, 30% );
+  }
+  .gbLink {
+    color: $yellow;
+    text-decoration: underline;
+  }
+}
 </style>

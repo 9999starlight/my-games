@@ -8,6 +8,7 @@
         <button @click.prevent="fetchData" class="btn searchBtn">Search</button>
       </form>
       <p class="typing">Start typing to search...</p>
+      <Loader v-if="isLoading" />
     </div>
     <ResultsContainer v-if="getGameResults.length" />
     <h3 class="mg1" v-else>{{ statusMessage }}</h3>
@@ -20,18 +21,21 @@ import { apiKey, proxy, giantBombApi } from '../apiData'
 import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 import ResultsContainer from './ResultsContainer'
+import Loader from './Loader'
 
 export default {
   name: 'home',
   data () {
     return {
       searchData: '',
-      statusMessage: ''
+      statusMessage: '',
+      isLoading: false
       /* errorMessage: '' */
     }
   },
   components: {
-    ResultsContainer
+    ResultsContainer,
+    Loader
   },
   created () {
     console.log(this.searchData)
@@ -42,11 +46,13 @@ export default {
   },
   methods: {
     fetchData () {
+      this.isLoading = !this.isLoading
       axios
         .get(
           `${proxy}${giantBombApi}search/?api_key=${apiKey}&format=json&query=${this.searchData}&resources=game`
         )
         .then(response => {
+          this.isLoading = !this.isLoading
           console.log(response)
           this.$store.dispatch('clearArr')
           let resultsArray = []
@@ -89,13 +95,10 @@ export default {
     }
 
     .searchBtn {
-      background: linear-gradient(229deg, #095e52, #8fc5c9);
+      background: linear-gradient(180deg, #095e52, #0c796a);
       @include fonts($color: $white);
       letter-spacing: 3px;
       text-shadow: #17171a 1px 1px 0;
-        &:hover {
-           filter: brightness(40%);
-         }
     }
 
     @media(min-width: 500px) {

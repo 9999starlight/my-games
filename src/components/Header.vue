@@ -55,9 +55,6 @@ nav {
   .links {
     @include alignment($justify: flex-end);
     background-color: $darkPurple;
-    li:hover {
-      filter: brightness(50%);
-    }
   }
 }
 
@@ -66,6 +63,7 @@ nav {
 }
 
 .active {
-  background-color:rgb(90, 88, 88);
+  background: $turquoiseGradient;
+  opacity: 0.9;
 }
 </style>

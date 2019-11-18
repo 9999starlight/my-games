@@ -21,16 +21,15 @@
         </p>
       </div>
       <!-- <p>{{ result.guid }}</p> -->
-      <button class="btn btnDetails" @click="moreDetails(), toggleDetails()">
+      <button class="btn btnDetails" @click="toggleDetails()">
         More details &nbsp;<font-awesome-icon :icon="['fa', 'angle-double-down']" font-size="15px"></font-awesome-icon>
       </button>
     </div>
-    <gameDetails v-if="showDetails" />
+    <gameDetails v-if="showDetails" v-bind:result="result"/>
   </div>
 </template>
 <script>
 import gameDetails from './GameDetails'
-import { mapActions } from 'vuex'
 
 export default {
   name: 'SingleResult',
@@ -49,10 +48,6 @@ export default {
     gameDetails
   },
   methods: {
-    ...mapActions(['moreDetails']),
-    moreDetails () {
-      this.$store.dispatch('moreDetails', this.result.guid)
-    },
     toggleDetails () {
       this.showDetails = !this.showDetails
     }
@@ -128,9 +123,6 @@ export default {
       -webkit-animation: lightmove 8s ease infinite;
       -moz-animation: lightmove 8s ease infinite;
       animation: lightmove 8s ease infinite;
-      &:hover {
-      filter: brightness(50%);
-  }
     }
     @supports (-ms-ime-align: auto) {
       .btnDetails {

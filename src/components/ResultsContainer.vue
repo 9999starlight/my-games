@@ -1,7 +1,7 @@
 <template>
   <div class="resultsContainer">
       <div v-for="result in getGameResults" :key="result.guid">
-        <SingleResult v-bind:result="result"/>
+        <SingleResult v-bind:result="result" />
     </div>
   </div>
 </template>

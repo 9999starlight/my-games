@@ -7,12 +7,13 @@
         <input type="text" v-model="searchData" />
         <button @click.prevent="fetchData" class="btn searchBtn">Search</button>
       </form>
-      <p class="typing">Start typing to search...</p>
+      <p class="typing">Enter game name or keyword to search...</p>
       <Loader v-if="isLoading" />
     </div>
     <ResultsContainer v-if="getGameResults.length" />
     <h3 class="mg1" v-else>{{ statusMessage }}</h3>
     <!-- <h3 v-if="errorMessage"></h3> -->
+    <Login v-if="showLoginState" />
   </div>
 </template>
 
@@ -22,37 +23,40 @@ import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 import ResultsContainer from './ResultsContainer'
 import Loader from './Loader'
+import Login from './Login'
+import loaderMixin from '../mixins/loaderMixin'
 
 export default {
   name: 'home',
   data () {
     return {
       searchData: '',
-      statusMessage: '',
-      isLoading: false
+      statusMessage: ''
       /* errorMessage: '' */
     }
   },
   components: {
     ResultsContainer,
-    Loader
+    Loader,
+    Login
   },
   created () {
     console.log(this.searchData)
   },
+  mixins: [loaderMixin],
   computed: {
-    ...mapGetters(['getGameResults']),
+    ...mapGetters(['getGameResults', 'showLoginState']),
     ...mapActions(['clearArr', 'catchResults'])
   },
   methods: {
     fetchData () {
-      this.isLoading = !this.isLoading
+      this.toggleLoader()
       axios
         .get(
           `${proxy}${giantBombApi}search/?api_key=${apiKey}&format=json&query=${this.searchData}&resources=game`
         )
         .then(response => {
-          this.isLoading = !this.isLoading
+          this.toggleLoader()
           console.log(response)
           this.$store.dispatch('clearArr')
           let resultsArray = []

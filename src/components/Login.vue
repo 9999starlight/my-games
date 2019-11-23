@@ -1,13 +1,170 @@
 <template>
-  <div>
-    <h2>Login</h2>
+  <div class="loginContainer">
+    <div class="loginOverlay" @click="toggleLogin"></div>
+    <div class="loginWrapper">
+      <div class="formWrapper">
+        <form class="loginForm flex">
+          <font-awesome-icon
+          :icon="['fa', 'window-close']"
+          class="close"
+          @click="toggleLogin"
+          title="Close">
+          </font-awesome-icon>
+          <div class="formHeader flex flexCenter">
+            <h2 v-if="!showSignUp" class="mgb1">Login</h2>
+            <h2 v-else class="mgb1">Sign Up</h2>
+            <p v-if="!showSignUp">
+              Dont'have an account?
+              <span @click="toggleSignUp" class="signupLink">Sign Up</span>
+            </p>
+          </div>
+          <div class="formGroup">
+            <label for="email" class="block">Email</label>
+            <input type="email" name="" id="email" />
+          </div>
+          <div class="formGroup">
+            <label for="password" class="block">Password</label>
+            <input type="password" name="" id="password" />
+          </div>
+          <p class="error"></p>
+          <button v-if="!showSignUp" class="loginBtn">Login</button>
+          <button v-if="showSignUp" class="signUpBtn">Create Account</button>
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
-  name: 'login'
+  name: 'Login',
+  data () {
+    return {
+      showSignUp: false
+    }
+  },
+
+  methods: {
+    ...mapMutations(['toggleLogin']),
+
+    toggleSignUp () {
+      this.showSignUp = !this.showSignUp
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
+.loginOverlay {
+  @include boxSize($width: 100%, $minHeight: 100vh);
+  top: 0;
+  left: 0;
+  position: absolute;
+  z-index: 2;
+  background-image: linear-gradient(
+    330deg,
+    #943838bf 0%,
+    #546e3bbd 25%,
+    #278a8ae8 50%,
+    #5c387e 75%,
+    #875532c7 100%
+  );
+}
+
+.loginWrapper {
+  @include boxSize($height: 100vh, $width: 100vw);
+  margin: 0 auto;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  position: fixed;
+  background-color: transparent;
+  z-index: 3;
+  overflow: auto;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.096),
+    0 6px 20px 0 rgba(0, 0, 0, 0.219);
+}
+
+.formWrapper {
+  @include boxSize($height: 100%, $width: 100%);
+}
+
+.loginForm {
+  @include boxSize($height: 100%);
+  @include alignment(
+    $direction: column,
+    $justify: space-evenly,
+    $align: center
+  );
+  color: darken($color: $turquoise, $amount: 30%);
+  background-color: rgba(240, 242, 243, 0.658);
+
+  .close {
+      @include fonts($size: 1.8rem, $color: rgba(68, 109, 126, 0.897));
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+
+  .formHeader {
+    @include alignment($direction: column);
+
+    p {
+      color: darken($color: $turquoise, $amount: 25%);
+    }
+    .signupLink {
+      @include fonts($color: rgb(14, 92, 122), $weight: 700);
+      cursor: pointer;
+      text-decoration: underline;
+      margin: 0 auto;
+      &:hover {
+        filter: brightness(40%);
+      }
+    }
+  }
+
+  button {
+    @include boxSize($width: 220px, $height: 40px);
+    background-color: rgb(27, 170, 202);
+    background-image: linear-gradient(180deg, #1faac1 0%, #106d82 100%);
+    @include fonts($size: 1rem, $color: $white);
+  }
+
+  .signUpBtn {
+    background-color: #ff3cef;
+    background-image: linear-gradient(180deg, #ff3cef 0%, #bc2baf 50%, #c52bb3 100%);
+  }
+  .formGroup {
+    text-align: left;
+    input {
+      @include boxSize($width: 250px);
+      padding: 0.3rem 0;
+      background-color: transparent;
+      border-bottom: 1px solid darken($color: $turquoise, $amount: 20%);
+      @include fonts(
+        $size: 0.9rem,
+        $color: darken($color: $turquoise, $amount: 30%)
+      );
+    }
+  }
+}
+
+@media (min-width: 600px) {
+  .loginWrapper {
+    @include boxSize($width: 400px, $maxHeight: 500px);
+
+    button {
+      @include boxSize($width: 300px);
+    }
+    .formGroup {
+      input {
+        @include boxSize($width: 300px);
+      }
+    }
+  }
+}
 </style>

@@ -25,7 +25,7 @@
         ><a>Sign Up</a></router-link
       > -->
       <li>User Email</li>
-      <li><button class="btn logBtn">Login</button></li>
+      <li><button class="btn logBtn" @click="toggleLogin">Login</button></li>
       <!-- <router-link to="/" tag="li">Logout</router-link> -->
       <li><button class="btn logBtn">Logout</button></li>
       </ul>
@@ -33,8 +33,19 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 export default {
-  name: 'appHeader'
+  name: 'appHeader',
+
+  methods: {
+    ...mapMutations(['toggleLogin'])
+    // ...mapGetters(['getLoginState'])
+  }/* ,
+   methods: {
+     toggleLogin () {
+       this.$store.commit('toggleLogin')
+     }
+   } */
 }
 </script>
 <style lang="scss" scoped>

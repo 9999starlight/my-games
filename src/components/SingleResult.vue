@@ -33,17 +33,20 @@ import gameDetails from './GameDetails'
 
 export default {
   name: 'SingleResult',
+
   data () {
     return {
       showDetails: false
     }
   },
+
   props: {
     result: {
       type: Object,
       required: true
     }
   },
+
   components: {
     gameDetails
   },
@@ -102,7 +105,7 @@ export default {
     .btnDetails {
       grid-area: btnDetails;
       @include boxSize($width: 100%);
-      background: linear-gradient(229deg, #095e52, #8fc5c9, #7acec1);
+      background: $turquoiseGradient;
       background-size: 600% 600%;
       @include fonts($color: $white, $size: 1rem);
       text-shadow: 2px 2px 4px #000;

@@ -20,7 +20,8 @@
 
 a,
 button,
-input[type="button"] {
+input[type="button"],
+svg {
   cursor: pointer;
 } 
 
@@ -62,4 +63,9 @@ input[type="button"]:hover {
   height: 30px;
   width: 80px;
 }
+
+.error {
+  @include fonts($color: crimson, $size: 0.8rem)
+}
+
 @import "mediaQueries.scss";

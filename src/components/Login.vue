@@ -5,10 +5,11 @@
       <div class="formWrapper">
         <form class="loginForm flex">
           <font-awesome-icon
-          :icon="['fa', 'window-close']"
-          class="close"
-          @click="toggleLogin"
-          title="Close">
+            :icon="['fa', 'window-close']"
+            class="close"
+            @click="toggleLogin"
+            title="Close"
+          >
           </font-awesome-icon>
           <div class="formHeader flex flexCenter">
             <h2 v-if="!showSignUp" class="mgb1">Login</h2>
@@ -17,18 +18,37 @@
               Dont'have an account?
               <span @click="toggleSignUp" class="signupLink">Sign Up</span>
             </p>
+            <p v-if="showSignUp">
+              <span @click="toggleSignUp" class="signupLink"
+                >Switch to Login</span
+              >
+            </p>
           </div>
           <div class="formGroup">
             <label for="email" class="block">Email</label>
-            <input type="email" name="" id="email" />
+            <input type="email" v-model="email" id="email" />
           </div>
           <div class="formGroup">
             <label for="password" class="block">Password</label>
-            <input type="password" name="" id="password" />
+            <input type="password" v-model="password" id="password" />
           </div>
-          <p class="error"></p>
-          <button v-if="!showSignUp" class="loginBtn">Login</button>
-          <button v-if="showSignUp" class="signUpBtn">Create Account</button>
+          <Message v-if="this.getMessage !== ''" />
+          <button
+            v-if="!showSignUp"
+            type="submit"
+            class="loginBtn"
+            @click.prevent="loginUser"
+          >
+            Login
+          </button>
+          <button
+            v-if="showSignUp"
+            type="submit"
+            class="signUpBtn"
+            @click.prevent="signUpUser"
+          >
+            Create Account
+          </button>
         </form>
       </div>
     </div>
@@ -36,21 +56,70 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapGetters, mapActions } from 'vuex'
+// import { auth } from '../firebaseConfig'
+import Message from './Message'
 
 export default {
   name: 'Login',
   data () {
     return {
-      showSignUp: false
+      showSignUp: false,
+      email: '',
+      password: ''
     }
   },
 
+  components: {
+    Message
+  },
+
+  computed: {
+    ...mapGetters(['showLogin', 'getUser', 'getMessage'])
+  },
+
   methods: {
-    ...mapMutations(['toggleLogin']),
+    ...mapMutations(['toggleLogin', 'updateMessage']),
+    ...mapActions(['login', 'signUp']),
 
     toggleSignUp () {
       this.showSignUp = !this.showSignUp
+    },
+
+    validation () {
+      const regEmail = /^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-Z]{2,5})$/
+      if (!regEmail.test(this.email) || this.password.length < 6) {
+        this.$store.commit(
+          'updateMessage',
+          'Invalid e-mail or password, please try again!'
+        )
+        // alert(`Invalid e-mail or password, please try again!`)
+        return false
+      } else return true
+    },
+
+    signUpUser () {
+      const isValid = this.validation()
+      if (!isValid) return
+      else {
+        const user = {
+          email: this.email,
+          password: this.password
+        }
+        this.$store.dispatch('signUp', user)
+      }
+    },
+
+    loginUser () {
+      const isValid = this.validation()
+      if (!isValid) return
+      else {
+        const user = {
+          email: this.email,
+          password: this.password
+        }
+        this.$store.dispatch('login', user)
+      }
     }
   }
 }
@@ -101,14 +170,14 @@ export default {
   background-color: rgba(240, 242, 243, 0.658);
 
   .close {
-      @include fonts($size: 1.8rem, $color: rgba(68, 109, 126, 0.897));
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      &:hover {
-        opacity: 0.7;
-      }
+    @include fonts($size: 1.8rem, $color: rgba(68, 109, 126, 0.897));
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    &:hover {
+      opacity: 0.7;
     }
+  }
 
   .formHeader {
     @include alignment($direction: column);
@@ -136,7 +205,12 @@ export default {
 
   .signUpBtn {
     background-color: #ff3cef;
-    background-image: linear-gradient(180deg, #ff3cef 0%, #bc2baf 50%, #c52bb3 100%);
+    background-image: linear-gradient(
+      180deg,
+      #ff3cef 0%,
+      #bc2baf 50%,
+      #c52bb3 100%
+    );
   }
   .formGroup {
     text-align: left;

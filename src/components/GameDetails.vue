@@ -1,54 +1,63 @@
 <template>
   <div class="detailsContainer flex flexCenter">
     <Loader v-if="isLoading" />
-    <div v-if="singleGameDetail.name" class="details">
-      <div class="mainGameInfo flex">
-        <img :src="singleGameDetail.image" alt="game image" class="block pd1" />
-        <div class="pd1">
-          <h2 class="mgb1">{{ singleGameDetail.name }}</h2>
-          <p class="mgb1"><strong>Year: </strong>{{ singleGameDetail.year }}</p>
-          <p class="mgb1">
-            <strong>Genre: </strong>{{ singleGameDetail.genre }}
-          </p>
-          <button class="addBtn mgt1" @click="addToList">Add to list</button>
-          <Message
-            v-if="message !== ''"
-            v-bind:message="message"
-            v-on:emptyMessage="updateMessage($event)"
+    <transition name="fadeIn">
+      <div v-if="singleGameDetail.name" class="details">
+        <div class="mainGameInfo flex">
+          <img
+            :src="singleGameDetail.image"
+            alt="game image"
+            class="block pd1"
           />
+          <div class="pd1">
+            <h2 class="mgb1">{{ singleGameDetail.name }}</h2>
+            <p class="mgb1">
+              <strong>Year: </strong>{{ singleGameDetail.year }}
+            </p>
+            <p class="mgb1">
+              <strong>Genre: </strong>{{ singleGameDetail.genre }}
+            </p>
+            <button class="addBtn mgt1" @click="addToList" :disabled="this.getUser === null">Add to my list</button>
+            <p v-if="this.getUser === null" class= "message">{{ loginMessage }}</p>
+            <transition name="expand">
+              <Message
+                v-if="this.getMessage !== ''"
+              />
+            </transition>
+            <a href="#nav" v-scroll-to="'#nav'" class="block hashLink">Back to top &nbsp;<font-awesome-icon :icon="['fa', 'hand-point-up']" font-size="15px"></font-awesome-icon></a>
+          </div>
         </div>
+        <p class="additionalInfo">
+          <strong>Platforms: </strong>{{ singleGameDetail.platforms }}
+        </p>
+        <p class="additionalInfo">
+          <strong>Publishers: </strong>{{ singleGameDetail.publishers }}
+        </p>
+        <p class="additionalInfo">
+          <strong>Description: </strong>{{ singleGameDetail.description }}
+        </p>
+        <p class="additionalInfo">
+          <strong>Similar Games: </strong>{{ singleGameDetail.similarGames }}
+        </p>
+        <a
+          :href="singleGameDetail.giantBombDetails"
+          target="_blank"
+          class="gbLink mg1"
+          >Giant Bomb Details</a
+        >
       </div>
-      <p class="additionalInfo">
-        <strong>Platforms: </strong>{{ singleGameDetail.platforms }}
-      </p>
-      <p class="additionalInfo">
-        <strong>Publishers: </strong>{{ singleGameDetail.publishers }}
-      </p>
-      <p class="additionalInfo">
-        <strong>Description: </strong>{{ singleGameDetail.description }}
-      </p>
-      <p class="additionalInfo">
-        <strong>Similar Games: </strong>{{ singleGameDetail.similarGames }}
-      </p>
-      <a
-        :href="singleGameDetail.giantBombDetails"
-        target="_blank"
-        class="gbLink mg1"
-        >Giant Bomb Details</a
-      >
-    </div>
+    </transition>
   </div>
 </template>
 
 <script>
-// import { mapGetters } from 'vuex'
 import { apiKey, proxy, giantBombApi } from '../apiData'
 import axios from 'axios'
 import Loader from './Loader'
 import Message from './Message'
 import { db } from '../firebaseConfig'
 import loaderMixin from '../mixins/loaderMixin'
-// import { mapActions } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 
 export default {
   name: 'gameDetails',
@@ -61,7 +70,7 @@ export default {
     return {
       singleGameDetail: {},
       id: this.result.guid,
-      message: ''
+      loginMessage: 'Login/Sign Up to add to your list'
     }
   },
 
@@ -78,10 +87,12 @@ export default {
     this.moreDetails(this.id)
   },
 
+  computed: {
+    ...mapGetters(['getMessage', 'getUser'])
+  },
+
   methods: {
-    updateMessage (clearedMessage) {
-      this.message = clearedMessage
-    },
+    ...mapMutations['updateMessage'],
 
     moreDetails (id) {
       this.toggleLoader()
@@ -129,11 +140,11 @@ export default {
     addToList () {
       db.collection('games')
         .where('gameId', '==', this.id)
+        .where('userId', '==', this.getUser.uid)
         .get()
         .then(snapshot => {
           if (snapshot.docs.length) {
-            this.message = 'You have already added that item to your list!'
-            // this.$store.dispatch('messageTimeout', this.message)
+            this.$store.commit('updateMessage', 'You have already added that item to your list!')
           } else {
             this.message = ''
             db.collection('games').add({
@@ -142,12 +153,11 @@ export default {
               year: this.singleGameDetail.year,
               genre: this.singleGameDetail.genre,
               gbLink: this.singleGameDetail.giantBombDetails,
-              // userId:
+              userId: this.getUser.uid,
               gameId: this.id,
               favorite: false
             })
-            this.message = 'Added to your list'
-            // this.$store.dispatch('messageTimeout', this.message)
+            this.$store.commit('updateMessage', 'Added to your list')
           }
         })
         .catch(err => console.log(err.message))
@@ -158,6 +168,13 @@ export default {
 <style lang="scss" scoped>
 .detailsContainer {
   @include alignment($direction: column);
+  .fadeIn-enter-active {
+    animation: fadeIn 1s;
+  }
+  .fadeIn-leave-active {
+    animation: fadeIn 1s reverse;
+  }
+
   .details {
     @include alignment($textAlign: left);
     @include boxSize($width: 100%);
@@ -165,6 +182,14 @@ export default {
       @include alignment($direction: column);
       img {
         @include boxSize($height: auto, $width: 200px);
+      }
+
+      .expand-enter-active {
+        animation: expand 0.6s;
+      }
+
+      .expand-leave-active {
+        animation: expand 0.6s reverse;
       }
     }
     strong {

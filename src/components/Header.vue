@@ -1,66 +1,58 @@
 <template>
-  <nav class="flex">
-    <ul class ="links flex">
+  <nav class="flex" id="nav">
+    <ul class="links flex">
       <router-link :to="{ name: 'home' }" tag="li" active-class="active" exact
         ><a>Search</a></router-link
       >
-      <router-link :to="{ name: 'myList' }" tag="li" active-class="active"
+      <router-link v-if="getUser" :to="{ name: 'list' }" tag="li" active-class="active"
         ><a>My List</a></router-link
       >
-      <!-- <li>User Email</li>
-      <router-link to="/login" tag="li" active-class="active"
-        ><a>Login</a></router-link
-      >
-      <router-link to="/signup" tag="li" active-class="active"
-        ><a>Sign Up</a></router-link
-      >
-      <router-link to="/" tag="li">Logout</router-link> -->
-      <!--za sada sam stavila da kada se logout ide na home-->
     </ul>
-    <ul class = "userLinks flex">
-      <!-- <router-link to="/login" tag="li" active-class="active"
-        ><a>Login</a></router-link
-      >
-      <router-link to="/signup" tag="li" active-class="active"
-        ><a>Sign Up</a></router-link
-      > -->
-      <li>User Email</li>
-      <li><button class="btn logBtn" @click="toggleLogin">Login</button></li>
-      <!-- <router-link to="/" tag="li">Logout</router-link> -->
-      <li><button class="btn logBtn">Logout</button></li>
-      </ul>
+    <ul class="userLinks flex">
+      <li>{{ getUser ? getUser.email : null }}</li>
+      <li v-if="getUser">
+        <button class="btn logBtn" @click.prevent="logoutUser">Logout</button>
+      </li>
+      <li v-if="getUser === null">
+        <button class="btn logBtn" @click="toggleLogin">Login</button>
+      </li>
+    </ul>
   </nav>
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapGetters, mapActions } from 'vuex'
+// import { auth } from '../firebaseConfig'
 export default {
   name: 'appHeader',
 
+  computed: {
+    ...mapGetters(['getUser'])
+  },
+
   methods: {
-    ...mapMutations(['toggleLogin'])
-    // ...mapGetters(['getLoginState'])
-  }/* ,
-   methods: {
-     toggleLogin () {
-       this.$store.commit('toggleLogin')
-     }
-   } */
+    ...mapMutations(['toggleLogin']),
+    ...mapActions(['logout']),
+
+    logoutUser () {
+      this.$store.dispatch('logout')
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
 nav {
   @include alignment($direction: column);
   ul {
-      li {
-        padding: 0.7rem;
-        @include fonts($size: 1rem);
-  }
+    li {
+      padding: 0.7rem;
+      @include fonts($size: 1rem);
+    }
 
-  .logBtn {
-    background-color: transparent;
-    @include fonts($color: $turquoise, $size: 1rem);
-  }
+    .logBtn {
+      background-color: transparent;
+      @include fonts($color: $turquoise, $size: 1rem);
+    }
   }
 
   .links {
@@ -70,7 +62,7 @@ nav {
 }
 
 .userLinks {
-  @include alignment($justify: space-between)
+  @include alignment($justify: space-between, $align: center);
 }
 
 .active {

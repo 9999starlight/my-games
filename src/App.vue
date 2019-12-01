@@ -7,6 +7,7 @@
 
 <script>
 import Header from './components/Header'
+import { mapActions, mapGetters } from 'vuex'
 /* import Home from './components/Home'
 import GameDetails from './components/GameDetails'
 import Login from './components/Login'
@@ -20,9 +21,26 @@ export default {
       // activeComponent: 'home'
     }
   },
+  /* 
+  created () {
+    this.$store.dispatch('authListener')
+    this.showUser()
+  }, */
+
   components: {
     'appHeader': Header
   }
+
+  /* computed: {
+    ...mapGetters(['user'])
+  },
+
+  methods: {
+    ...mapActions(['authListener']),
+    showUser () {
+      console.log(this.user)
+    }
+  } */
 }
 </script>
 

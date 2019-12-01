@@ -25,7 +25,7 @@
         More details &nbsp;<font-awesome-icon :icon="['fa', 'angle-double-down']" font-size="15px"></font-awesome-icon>
       </button>
     </div>
-    <gameDetails v-if="showDetails" v-bind:result="result"/>
+      <gameDetails v-if="showDetails" v-bind:result="result" />
   </div>
 </template>
 <script>

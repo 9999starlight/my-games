@@ -4,16 +4,17 @@
       <h3 class="mgb1">Search for games</h3>
       <h5 class="mgb1">Login to add games to your list and mark favorites</h5>
       <form class="search flex flexCenter">
-        <input type="text" v-model="searchData" />
+        <input type="text" v-model="searchData" placeholder="Search..."/>
         <button @click.prevent="fetchData" class="btn searchBtn">Search</button>
       </form>
       <p class="typing">Enter game name or keyword to search...</p>
       <Loader v-if="isLoading" />
     </div>
-    <ResultsContainer v-if="getGameResults.length" />
+    <ResultsContainer v-if="hasResults" />
     <h3 class="mg1" v-else>{{ statusMessage }}</h3>
-    <!-- <h3 v-if="errorMessage"></h3> -->
-    <Login v-if="showLoginState" />
+    <transition name="fadeIn">
+    <Login v-show="showLogin" />
+    </transition>
   </div>
 </template>
 
@@ -31,8 +32,8 @@ export default {
   data () {
     return {
       searchData: '',
-      statusMessage: ''
-      /* errorMessage: '' */
+      statusMessage: '',
+      hasResults: false
     }
   },
   components: {
@@ -40,14 +41,14 @@ export default {
     Loader,
     Login
   },
-  created () {
-    console.log(this.searchData)
-  },
+
   mixins: [loaderMixin],
+
   computed: {
-    ...mapGetters(['getGameResults', 'showLoginState']),
+    ...mapGetters(['getGameResults', 'showLogin']),
     ...mapActions(['clearArr', 'catchResults'])
   },
+
   methods: {
     fetchData () {
       this.toggleLoader()
@@ -62,13 +63,18 @@ export default {
           let resultsArray = []
           if (response.data.results.length) {
             console.log(response.data.results)
+            this.hasResults = !this.hasResults
             response.data.results.forEach(d => resultsArray.push(d))
             this.$store.dispatch('catchResults', resultsArray)
           } else {
+            this.hasResults = false
             this.statusMessage = 'Game not found'
           }
         })
-        .catch(error => console.log(error))
+        .catch(error => {
+          console.log(error)
+          this.statusMessage = 'Something went wrong, try again later!'
+        })
     }
   }
 }
@@ -79,7 +85,13 @@ export default {
   color: $white;
   @include boxSize($width: 100%);
   @include alignment($textAlign: center);
+    .fadeIn-enter-active {
+        animation: fadeIn 0.7s;
+      }
 
+    .fadeIn-leave-active {
+        animation: fadeIn 0.7s reverse;
+  }
   .formWrapper {
     @include alignment($direction: column, $textAlign: center);
     .typing {

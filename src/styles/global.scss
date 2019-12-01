@@ -59,6 +59,10 @@ input[type="button"]:hover {
   display: grid;
 }
 
+.fullWidth {
+  width: 100%;
+}
+
 .btn {
   height: 30px;
   width: 80px;
@@ -66,6 +70,21 @@ input[type="button"]:hover {
 
 .error {
   @include fonts($color: crimson, $size: 0.8rem)
+}
+
+.message {
+  @include fonts($size: 0.9rem, $color: rgb(207, 117, 132));
+  padding: 0.7rem 0;
+}
+
+button:disabled {
+  opacity: 0.1;
+}
+
+.hashLink {
+  text-shadow: 2px 2px 4px #000;
+  padding: 0.7rem 0;
+  color: rgba(155, 243, 243, 0.925);
 }
 
 @import "mediaQueries.scss";

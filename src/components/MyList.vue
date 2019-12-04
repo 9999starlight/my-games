@@ -27,12 +27,14 @@ import { db } from '../firebaseConfig'
 import Loader from './Loader'
 import loaderMixin from '../mixins/loaderMixin'
 import ListItem from './ListItem'
+import { auth } from '../firebaseConfig'
 import { mapGetters } from 'vuex'
 
 export default {
   data () {
     return {
-      fetchedDatabase: []
+      fetchedDatabase: [],
+      // user: auth.currentUser.uid
     }
   },
 
@@ -43,14 +45,16 @@ export default {
     Loader
   },
 
-  mounted () {
+  created () {
+    this.$store.dispatch('fetchUser')
     this.fetchGamesCollection()
+    // console.log(this.user)
   },
 
   mixins: [loaderMixin],
 
   computed: {
-    ...mapGetters(['getUser'])
+    ...mapGetters(['user'])
   },
 
   methods: {
@@ -66,9 +70,9 @@ export default {
 
     fetchGamesCollection () {
       this.toggleLoader()
-      if (this.getUser) {
+      if (this.user) {
         db.collection('games')
-          .where('userId', '==', this.getUser.uid)
+          .where('userId', '==', this.user)
           .get()
           .then(
             snapshot => {
@@ -84,7 +88,7 @@ export default {
     sortByAbc () {
       db.collection('games')
         .orderBy('name')
-        .where('userId', '==', this.getUser.uid)
+        .where('userId', '==', this.user)
         .get()
         .then(
           snapshot => {
@@ -97,7 +101,7 @@ export default {
     sortByYear () {
       db.collection('games')
         .orderBy('year')
-        .where('userId', '==', this.getUser.uid)
+        .where('userId', '==', this.user)
         .get()
         .then(
           snapshot => {
@@ -110,7 +114,7 @@ export default {
     getUpdatedData () {
       const gamesArr = []
       db.collection('games')
-        .where('userId', '==', this.getUser.uid)
+        .where('userId', '==', this.user)
         .get()
         .then(data => {
           data.docs.forEach(doc => {
@@ -149,6 +153,4 @@ export default {
       @include boxSize($maxWidth: 900px);
     }
   }
-
-
 </style>

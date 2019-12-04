@@ -4,38 +4,68 @@
       <router-link :to="{ name: 'home' }" tag="li" active-class="active" exact
         ><a>Search</a></router-link
       >
-      <router-link v-if="getUser" :to="{ name: 'list' }" tag="li" active-class="active"
+      <router-link
+        v-if="isLogged"
+        :to="{ name: 'list' }"
+        tag="li"
+        active-class="active"
         ><a>My List</a></router-link
       >
     </ul>
     <ul class="userLinks flex">
-      <li>{{ getUser ? getUser.email : null }}</li>
-      <li v-if="getUser">
+      <li v-if="isLogged">{{ currentUser }}</li>
+      <li v-if="isLogged">
         <button class="btn logBtn" @click.prevent="logoutUser">Logout</button>
       </li>
-      <li v-if="getUser === null">
-        <button class="btn logBtn" @click="toggleLogin">Login</button>
-      </li>
+      <router-link
+        v-if="!isLogged"
+        :to="{ name: 'login' }"
+        tag="li"
+        active-class="active"
+        class="logBtn"
+        ><a>Login</a></router-link
+      >
     </ul>
   </nav>
 </template>
 
 <script>
-import { mapMutations, mapGetters, mapActions } from 'vuex'
-// import { auth } from '../firebaseConfig'
+import { mapGetters, mapMutations } from 'vuex'
+import { auth } from '../firebaseConfig'
+
 export default {
+    data() {
+    return {
+      isLogged: false,
+      currentUser: false
+    }
+  },
+
   name: 'appHeader',
 
-  computed: {
-    ...mapGetters(['getUser'])
+  created() {
+    if (auth.currentUser) {
+      this.isLogged = true
+      this.currentUser = auth.currentUser.email
+      // console.log(auth.currentUser)
+    }
   },
 
   methods: {
-    ...mapMutations(['toggleLogin']),
-    ...mapActions(['logout']),
+    // ...mapMutations[('setUser')],
 
     logoutUser () {
-      this.$store.dispatch('logout')
+      auth.signOut().then(() => {
+        localStorage.removeItem('user')
+        // this.$store.commit('setUser', null)
+        if (this.$router.currentRoute.name === 'list') {
+          this.$router.replace({
+            name: 'home'
+          })
+        }
+      }).catch(err => {
+            console.log(err.message)
+        })
     }
   }
 }

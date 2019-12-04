@@ -17,8 +17,8 @@
             <p class="mgb1">
               <strong>Genre: </strong>{{ singleGameDetail.genre }}
             </p>
-            <button class="addBtn mgt1" @click="addToList" :disabled="this.getUser === null">Add to my list</button>
-            <p v-if="this.getUser === null" class= "message">{{ loginMessage }}</p>
+            <button class="addBtn mgt1" @click="addToList" :disabled="user === null">Add to my list</button>
+            <p v-if="user === null" class= "message">{{ loginMessage }}</p>
             <transition name="expand">
               <Message
                 v-if="this.getMessage !== ''"
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { apiKey, proxy, giantBombApi } from '../apiData'
+import { apiKey, enableHttps, giantBombApi } from '../apiData'
 import axios from 'axios'
 import Loader from './Loader'
 import Message from './Message'
@@ -88,17 +88,17 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['getMessage', 'getUser'])
+    ...mapGetters(['getMessage', 'user'])
   },
 
   methods: {
-    ...mapMutations['updateMessage'],
+    ...mapMutations(['updateMessage']),
 
     moreDetails (id) {
       this.toggleLoader()
       axios
         .get(
-          `${proxy}${giantBombApi}game/${id}/?api_key=${apiKey}&format=json&field_list=genres,name,image,deck,publishers,platforms,similar_games,site_detail_url,expected_release_year`
+          `${enableHttps}${giantBombApi}game/${id}/?api_key=${apiKey}&format=json&field_list=genres,name,image,deck,publishers,platforms,similar_games,site_detail_url,expected_release_year`
         )
         .then(response => {
           this.toggleLoader()
@@ -140,7 +140,7 @@ export default {
     addToList () {
       db.collection('games')
         .where('gameId', '==', this.id)
-        .where('userId', '==', this.getUser.uid)
+        .where('userId', '==', this.user)
         .get()
         .then(snapshot => {
           if (snapshot.docs.length) {
@@ -153,7 +153,7 @@ export default {
               year: this.singleGameDetail.year,
               genre: this.singleGameDetail.genre,
               gbLink: this.singleGameDetail.giantBombDetails,
-              userId: this.getUser.uid,
+              userId: this.user,
               gameId: this.id,
               favorite: false
             })

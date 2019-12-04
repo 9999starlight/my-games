@@ -7,12 +7,6 @@
 
 <script>
 import Header from './components/Header'
-import { mapActions, mapGetters } from 'vuex'
-/* import Home from './components/Home'
-import GameDetails from './components/GameDetails'
-import Login from './components/Login'
-import SignUp from './components/SignUp'
-import MyList from './components/MyList' */
 
 export default {
   name: 'app',
@@ -21,26 +15,10 @@ export default {
       // activeComponent: 'home'
     }
   },
-  /* 
-  created () {
-    this.$store.dispatch('authListener')
-    this.showUser()
-  }, */
 
   components: {
     'appHeader': Header
   }
-
-  /* computed: {
-    ...mapGetters(['user'])
-  },
-
-  methods: {
-    ...mapActions(['authListener']),
-    showUser () {
-      console.log(this.user)
-    }
-  } */
 }
 </script>
 

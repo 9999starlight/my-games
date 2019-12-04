@@ -21,17 +21,11 @@ Vue.use(VueScrollTo)
 
 Vue.config.productionTip = false
 
-new Vue({
-  store,
-  router,
-  axios,
-  render: h => h(App)
-}).$mount('#app')
-
 auth.onAuthStateChanged(user => {
-  if (user) {
-    store.commit('setUser')
-  } else {
-    store.commit('setUser')
-  }
+  new Vue({
+    store,
+    router,
+    axios,
+    render: h => h(App)
+  }).$mount('#app')
 })

@@ -12,19 +12,15 @@
     </div>
     <ResultsContainer v-if="hasResults" />
     <h3 class="mg1" v-else>{{ statusMessage }}</h3>
-    <transition name="fadeIn">
-    <Login v-show="showLogin" />
-    </transition>
   </div>
 </template>
 
 <script>
-import { apiKey, proxy, giantBombApi } from '../apiData'
+import { apiKey, enableHttps, giantBombApi } from '../apiData'
 import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 import ResultsContainer from './ResultsContainer'
 import Loader from './Loader'
-import Login from './Login'
 import loaderMixin from '../mixins/loaderMixin'
 
 export default {
@@ -38,14 +34,13 @@ export default {
   },
   components: {
     ResultsContainer,
-    Loader,
-    Login
+    Loader
   },
 
   mixins: [loaderMixin],
 
   computed: {
-    ...mapGetters(['getGameResults', 'showLogin']),
+    ...mapGetters(['getGameResults']),
     ...mapActions(['clearArr', 'catchResults'])
   },
 
@@ -54,7 +49,7 @@ export default {
       this.toggleLoader()
       axios
         .get(
-          `${proxy}${giantBombApi}search/?api_key=${apiKey}&format=json&query=${this.searchData}&resources=game`
+          `${enableHttps}${giantBombApi}search/?api_key=${apiKey}&format=json&query=${this.searchData}&resources=game`
         )
         .then(response => {
           this.toggleLoader()
@@ -85,13 +80,6 @@ export default {
   color: $white;
   @include boxSize($width: 100%);
   @include alignment($textAlign: center);
-    .fadeIn-enter-active {
-        animation: fadeIn 0.7s;
-      }
-
-    .fadeIn-leave-active {
-        animation: fadeIn 0.7s reverse;
-  }
   .formWrapper {
     @include alignment($direction: column, $textAlign: center);
     .typing {

@@ -1,16 +1,16 @@
 <template>
   <div class="loginContainer">
-    <div class="loginOverlay" @click="toggleLogin"></div>
+    <div class="loginOverlay"></div>
     <div class="loginWrapper">
       <div class="formWrapper">
         <form class="loginForm flex">
-          <font-awesome-icon
+          <!-- <font-awesome-icon
             :icon="['fa', 'window-close']"
             class="close"
-            @click="toggleLogin"
+            @click="$emit('toggling')"
             title="Close"
           >
-          </font-awesome-icon>
+          </font-awesome-icon> -->
           <div class="formHeader flex flexCenter">
             <h2 v-if="!showSignUp" class="mgb1">Login</h2>
             <h2 v-else class="mgb1">Sign Up</h2>
@@ -56,12 +56,12 @@
 </template>
 
 <script>
-import { mapMutations, mapGetters, mapActions } from 'vuex'
-// import { auth } from '../firebaseConfig'
+import { mapMutations, mapGetters } from 'vuex'
+import { auth } from '../firebaseConfig'
 import Message from './Message'
 
 export default {
-  name: 'Login',
+  name: 'login',
   data () {
     return {
       showSignUp: false,
@@ -70,17 +70,23 @@ export default {
     }
   },
 
+  /* props: {
+    showLogin: {
+      type: Boolean,
+      required: true
+    }
+  }, */
+
   components: {
     Message
   },
 
   computed: {
-    ...mapGetters(['showLogin', 'getUser', 'getMessage'])
+    ...mapGetters(['getMessage'])
   },
 
   methods: {
-    ...mapMutations(['toggleLogin', 'updateMessage']),
-    ...mapActions(['login', 'signUp']),
+    ...mapMutations(['updateMessage']),
 
     toggleSignUp () {
       this.showSignUp = !this.showSignUp
@@ -93,7 +99,6 @@ export default {
           'updateMessage',
           'Invalid e-mail or password, please try again!'
         )
-        // alert(`Invalid e-mail or password, please try again!`)
         return false
       } else return true
     },
@@ -102,11 +107,17 @@ export default {
       const isValid = this.validation()
       if (!isValid) return
       else {
-        const user = {
-          email: this.email,
-          password: this.password
-        }
-        this.$store.dispatch('signUp', user)
+        auth
+          .createUserWithEmailAndPassword(this.email, this.password)
+          .then(data => {
+            // this.$emit('toggling')
+            localStorage.setItem('user', JSON.stringify(res.user))
+            this.$router.push('home')
+          })
+          .catch(err => {
+            console.log(err.message)
+            this.$store.commit('updateMessage', err.message)
+          })
       }
     },
 
@@ -114,17 +125,32 @@ export default {
       const isValid = this.validation()
       if (!isValid) return
       else {
-        const user = {
-          email: this.email,
-          password: this.password
-        }
-        this.$store.dispatch('login', user)
+        auth
+          .signInWithEmailAndPassword(this.email, this.password)
+          .then(res => {
+            // this.$emit('toggling')
+            localStorage.setItem('user', JSON.stringify(res.user))
+            this.$router.push('home')
+          })
+          .catch(err => {
+            console.log(err.message)
+            this.$store.commit('updateMessage', err.message)
+          })
       }
     }
   }
 }
 </script>
 <style lang="scss" scoped>
+/* .loginContainer {
+  .fadeIn-enter-active {
+    animation: fadeIn 2s;
+  }
+
+  .fadeIn-leave-active {
+    animation: fadeIn 2s reverse;
+  }
+} */
 .loginOverlay {
   @include boxSize($width: 100%, $minHeight: 100vh);
   top: 0;

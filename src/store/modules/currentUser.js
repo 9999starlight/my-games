@@ -1,4 +1,5 @@
 import { auth } from '../../firebaseConfig'
+
 const state = {
   user: null
 }

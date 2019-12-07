@@ -36,7 +36,7 @@ let router = new Router({
 
   ]
 })
-
+// guard for list route - only for logged in user
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!auth.currentUser) {

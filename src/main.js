@@ -10,10 +10,17 @@ import {
   faAngleDoubleDown,
   faWindowClose,
   faTrashAlt,
-  faHandPointUp
+  faHandPointUp,
+  faUser,
+  faSignOutAlt,
+  faSignInAlt,
+  faSearch
 } from '@fortawesome/free-solid-svg-icons'
+/* import {
+  faUser
+} from '@fortawesome/free-regular-svg-icons' */
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-library.add(faAngleDoubleDown, faWindowClose, faTrashAlt, faHandPointUp)
+library.add(faAngleDoubleDown, faWindowClose, faTrashAlt, faHandPointUp, faUser, faSignOutAlt, faSignInAlt, faSearch)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 let VueScrollTo = require('vue-scrollto')
 Vue.use(VueAxios, axios)

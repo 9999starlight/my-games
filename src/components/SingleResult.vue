@@ -12,7 +12,7 @@
           Year:
           <strong>{{
             result.expected_release_year === null
-              ? 'N/A'
+              ? "N/A"
               : result.expected_release_year
           }}</strong>
         </p>
@@ -20,12 +20,18 @@
           Type: <strong>{{ result.resource_type }}</strong>
         </p>
       </div>
-      <!-- <p>{{ result.guid }}</p> -->
       <button class="btn btnDetails" @click="toggleDetails()">
-        More details &nbsp;<font-awesome-icon :icon="['fa', 'angle-double-down']" font-size="15px"></font-awesome-icon>
+        More details &nbsp;<font-awesome-icon
+          :icon="['fa', 'angle-double-down']"
+          font-size="15px"
+        ></font-awesome-icon>
       </button>
     </div>
-      <gameDetails v-if="showDetails" v-bind:result="result" />
+    <gameDetails
+      v-if="showDetails"
+      :result="result"
+      @closingDetails="toggleDetails"
+    />
   </div>
 </template>
 <script>
@@ -78,12 +84,11 @@ export default {
     grid-template-rows: 1fr 1fr 1fr 1fr 30px;
     grid-gap: 10px;
     grid-template-areas:
-      'smallImage gameInfo'
-      'smallImage gameInfo'
-      'smallImage gameInfo'
-      'smallImage gameInfo'
-      'btnDetails btnDetails';
-    @include boxSize($minHeight: 200px);
+      "smallImage gameInfo"
+      "smallImage gameInfo"
+      "smallImage gameInfo"
+      "smallImage gameInfo"
+      "btnDetails btnDetails";
     @include alignment($textAlign: left);
     padding: 1rem 1rem 0 1rem;
     @include fonts($color: $white);
@@ -91,9 +96,6 @@ export default {
     .smallImage {
       @include boxSize($height: auto, $width: 80px);
       grid-area: smallImage;
-      /* object-fit: cover;
-      width: 80px;
-      height: 120px; */
     }
     .gameInfo {
       grid-area: gameInfo;
@@ -134,22 +136,24 @@ export default {
       }
     }
   }
+}
 
-  @media (min-width: 600px) {
+@media (min-width: 600px) {
+  .singleResultWrapper {
     .singleResult {
       grid-template-columns: 1fr 4fr;
       grid-template-rows: 1fr 1fr 30px;
       grid-template-areas:
-        'smallImage gameInfo'
-        'smallImage gameInfo'
-        'btnDetails btnDetails';
+        "smallImage gameInfo"
+        "smallImage gameInfo"
+        "btnDetails btnDetails";
       max-height: 200px;
 
       .gameInfo {
         p {
-        @include fonts($size: 1rem);
+          @include fonts($size: 1rem);
+        }
       }
-    }
     }
   }
 }

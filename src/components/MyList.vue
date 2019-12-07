@@ -1,13 +1,13 @@
 <template>
   <div class="gameListWrapper flex flexCenter">
-    <Loader v-if="isLoading" />
     <h2 class="mgb2">My List</h2>
     <div class="buttonWrapper flex flexCenter fullWidth mgb1">
-      <button @click="sortByAbc" class="sortBtn">Sort A-Z</button>
-      <button @click="sortByYear" class="sortBtn">Sort by Year</button>
+      <button @click="sortByAbc" class="btn sortBtn">Sort A-Z</button>
+      <button @click="sortByYear" class="btn sortBtn">Sort by Year</button>
     </div>
+    <Loader v-if="isLoading" />
     <div
-      class="gameList flex flexCenter fullWidth mgb1"
+      class="gameList flex flexCenter fullWidth"
       v-for="listItem in fetchedDatabase"
       :key="listItem.dbId"
     >
@@ -27,14 +27,12 @@ import { db } from '../firebaseConfig'
 import Loader from './Loader'
 import loaderMixin from '../mixins/loaderMixin'
 import ListItem from './ListItem'
-import { auth } from '../firebaseConfig'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data () {
     return {
-      fetchedDatabase: [],
-      // user: auth.currentUser.uid
+      fetchedDatabase: []
     }
   },
 
@@ -48,7 +46,6 @@ export default {
   created () {
     this.$store.dispatch('fetchUser')
     this.fetchGamesCollection()
-    // console.log(this.user)
   },
 
   mixins: [loaderMixin],
@@ -58,6 +55,9 @@ export default {
   },
 
   methods: {
+    ...mapActions(['fetchUser']),
+
+    // realtime fetched or updated collection
     snapshotFunction (snapshot) {
       const gamesArray = []
       snapshot.docs.forEach(doc => {
@@ -68,6 +68,7 @@ export default {
       this.fetchedDatabase = gamesArray
     },
 
+    // fetch current user's collection
     fetchGamesCollection () {
       this.toggleLoader()
       if (this.user) {
@@ -111,6 +112,7 @@ export default {
         )
     },
 
+    // fetch collection after update
     getUpdatedData () {
       const gamesArr = []
       db.collection('games')
@@ -141,9 +143,10 @@ export default {
     .sortBtn {
       background: linear-gradient(to bottom, rgb(120, 119, 128) 0%, rgb(59, 58, 68) 0%, rgb(130, 135, 161) 0%, rgb(65, 62, 66) 49%, rgb(62, 59, 63) 50%, rgb(140, 140, 156) 100%);
       color: white;
-      width: 155px;
+      width: 120px;
       font-size: 0.8rem;
       padding: 10px 0;
+      box-shadow: $shadowSmall;
     }
   }
 }

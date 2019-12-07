@@ -64,16 +64,20 @@ input[type="button"]:hover {
 }
 
 .btn {
-  height: 30px;
-  width: 80px;
+  border-radius: 8px;
 }
 
 .error {
   @include fonts($color: crimson, $size: 0.8rem)
 }
 
+.messageWrapper {
+  @include boxSize($height: 32px);
+  margin: 0 auto;
+}
+
 .message {
-  @include fonts($size: 0.9rem, $color: rgb(207, 117, 132));
+  @include fonts($size: 0.9rem, $color: rgb(196, 40, 126));
   padding: 0.7rem 0;
 }
 
@@ -87,4 +91,10 @@ button:disabled {
   color: rgba(155, 243, 243, 0.925);
 }
 
-@import "mediaQueries.scss";
+// transitions
+.fadeIn-enter-active {
+  animation: fadeIn 1s;
+}
+.fadeIn-leave-active {
+  animation: fadeIn 1s reverse;
+}

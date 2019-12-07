@@ -1,11 +1,14 @@
 <template>
   <div class="container center">
-    <div class="formWrapper flex flexCenter pd1">
-      <h3 class="mgb1">Search for games</h3>
+    <div class="formWrapper flex flexCenter pd1 mg2">
+      <h2 class="mgb1">Search for games</h2>
       <h5 class="mgb1">Login to add games to your list and mark favorites</h5>
       <form class="search flex flexCenter">
-        <input type="text" v-model="searchData" placeholder="Search..."/>
-        <button @click.prevent="fetchData" class="btn searchBtn">Search</button>
+        <input type="text" v-model="searchData" placeholder="Search..." ref="mainInput" autofocus/>
+        <button @click.prevent="fetchData" class="searchBtn">
+          <font-awesome-icon :icon="['fas', 'search']" class="magnify">
+          </font-awesome-icon>
+        </button>
       </form>
       <p class="typing">Enter game name or keyword to search...</p>
       <Loader v-if="isLoading" />
@@ -39,12 +42,17 @@ export default {
 
   mixins: [loaderMixin],
 
+  mounted () {
+    this.$refs['mainInput'].focus()
+  },
+
   computed: {
     ...mapGetters(['getGameResults']),
     ...mapActions(['clearArr', 'catchResults'])
   },
 
   methods: {
+    // search by input value
     fetchData () {
       this.toggleLoader()
       axios
@@ -58,7 +66,7 @@ export default {
           let resultsArray = []
           if (response.data.results.length) {
             console.log(response.data.results)
-            this.hasResults = !this.hasResults
+            this.hasResults = true
             response.data.results.forEach(d => resultsArray.push(d))
             this.$store.dispatch('catchResults', resultsArray)
           } else {
@@ -83,7 +91,7 @@ export default {
   .formWrapper {
     @include alignment($direction: column, $textAlign: center);
     .typing {
-      @include fonts($size: 0.8rem, $color: lightgray);
+      @include fonts($size: 0.8rem, $color: rgb(160, 159, 159));
     }
   }
 
@@ -92,25 +100,49 @@ export default {
 
     input[type='text'] {
       transition: width 0.5s ease-in-out;
-      width: 180px;
-      height: 30px;
-      font-size: 1.1rem;
-      color: $blackLead;
+      @include boxSize($width: 180px, $height: 30px);
+      @include fonts($color: $blackLead, $size: 1.1rem);
+      padding-left: 0.3rem;
+      border-radius: 8px 0 0 8px;
     }
 
     .searchBtn {
       background: linear-gradient(180deg, #095e52, #0c796a);
       @include fonts($color: $white);
-      letter-spacing: 3px;
-      text-shadow: #17171a 1px 1px 0;
+      @include boxSize($width: 60px, $height: 30px);
+      border-radius: 0 8px 8px 0;
+
+      .magnify {
+        @include fonts($size: 1.2rem);
+      }
     }
+  }
+}
 
     @media(min-width: 500px) {
-      input[type='text']:focus {
-      width: 400px;
-  }
-}
+      .container {
+        .search {
+          input[type='text'] {
+            @include boxSize($width: 220px, $height: 35px);
+              &:focus {
+                width: 400px;
+              }
+          }
 
-  }
-}
+          .searchBtn {
+            @include boxSize($height: 35px);
+          }
+        }
+      }
+    }
+
+    @media(min-width: 996px) {
+      .container {
+        @include boxSize($maxWidth: 900px);
+
+          .formWrapper {
+            @include fonts($size: 120%);
+           }
+      }
+    }
 </style>

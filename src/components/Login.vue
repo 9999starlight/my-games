@@ -1,16 +1,17 @@
 <template>
+<transition appear name="fadeIn">
   <div class="loginContainer">
-    <div class="loginOverlay"></div>
+    <div class="loginOverlay" @click="closeLogin"></div>
     <div class="loginWrapper">
       <div class="formWrapper">
         <form class="loginForm flex">
-          <!-- <font-awesome-icon
+          <font-awesome-icon
             :icon="['fa', 'window-close']"
             class="close"
-            @click="$emit('toggling')"
+            @click="closeLogin"
             title="Close"
           >
-          </font-awesome-icon> -->
+          </font-awesome-icon>
           <div class="formHeader flex flexCenter">
             <h2 v-if="!showSignUp" class="mgb1">Login</h2>
             <h2 v-else class="mgb1">Sign Up</h2>
@@ -32,11 +33,13 @@
             <label for="password" class="block">Password</label>
             <input type="password" v-model="password" id="password" />
           </div>
-          <Message v-if="this.getMessage !== ''" />
+          <div class="messageWrapper">
+            <Message v-if="this.getMessage !== ''" />
+          </div>
           <button
             v-if="!showSignUp"
             type="submit"
-            class="loginBtn"
+            class="btn loginBtn"
             @click.prevent="loginUser"
           >
             Login
@@ -44,7 +47,7 @@
           <button
             v-if="showSignUp"
             type="submit"
-            class="signUpBtn"
+            class="btn signUpBtn"
             @click.prevent="signUpUser"
           >
             Create Account
@@ -53,6 +56,7 @@
       </div>
     </div>
   </div>
+  </transition>
 </template>
 
 <script>
@@ -70,13 +74,6 @@ export default {
     }
   },
 
-  /* props: {
-    showLogin: {
-      type: Boolean,
-      required: true
-    }
-  }, */
-
   components: {
     Message
   },
@@ -88,8 +85,13 @@ export default {
   methods: {
     ...mapMutations(['updateMessage']),
 
+    // toggle login/sign up forms
     toggleSignUp () {
       this.showSignUp = !this.showSignUp
+    },
+
+    closeLogin () {
+      this.$router.push('home')
     },
 
     validation () {
@@ -103,6 +105,7 @@ export default {
       } else return true
     },
 
+    // firebase functions for creating new account & login
     signUpUser () {
       const isValid = this.validation()
       if (!isValid) return
@@ -110,9 +113,7 @@ export default {
         auth
           .createUserWithEmailAndPassword(this.email, this.password)
           .then(data => {
-            // this.$emit('toggling')
-            localStorage.setItem('user', JSON.stringify(res.user))
-            this.$router.push('home')
+            this.closeLogin()
           })
           .catch(err => {
             console.log(err.message)
@@ -128,9 +129,7 @@ export default {
         auth
           .signInWithEmailAndPassword(this.email, this.password)
           .then(res => {
-            // this.$emit('toggling')
-            localStorage.setItem('user', JSON.stringify(res.user))
-            this.$router.push('home')
+            this.closeLogin()
           })
           .catch(err => {
             console.log(err.message)
@@ -142,15 +141,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-/* .loginContainer {
-  .fadeIn-enter-active {
-    animation: fadeIn 2s;
-  }
-
-  .fadeIn-leave-active {
-    animation: fadeIn 2s reverse;
-  }
-} */
 .loginOverlay {
   @include boxSize($width: 100%, $minHeight: 100vh);
   top: 0;
@@ -220,6 +210,11 @@ export default {
         filter: brightness(40%);
       }
     }
+  }
+
+  .messageWrapper {
+    text-align: center;
+    margin: 0 1rem;
   }
 
   button {

@@ -1,7 +1,8 @@
 <template>
   <div class="detailsContainer flex flexCenter">
+    <div class="detailsOverlay" @click="$emit('closingDetails')"></div>
     <Loader v-if="isLoading" />
-    <transition name="fadeIn">
+    <transition appear name="fadeIn">
       <div v-if="singleGameDetail.name" class="details">
         <div class="mainGameInfo flex">
           <img
@@ -17,13 +18,15 @@
             <p class="mgb1">
               <strong>Genre: </strong>{{ singleGameDetail.genre }}
             </p>
-            <button class="addBtn mgt1" @click="addToList" :disabled="user === null">Add to my list</button>
+            <button class="btn addBtn mgt1" @click="addToList" :disabled="user === null">Add to my list</button>
             <p v-if="user === null" class= "message">{{ loginMessage }}</p>
+            <div class="messageWrapper">
             <transition name="expand">
               <Message
                 v-if="this.getMessage !== ''"
               />
             </transition>
+            </div>
             <a href="#nav" v-scroll-to="'#nav'" class="block hashLink">Back to top &nbsp;<font-awesome-icon :icon="['fa', 'hand-point-up']" font-size="15px"></font-awesome-icon></a>
           </div>
         </div>
@@ -84,6 +87,7 @@ export default {
   },
 
   created () {
+    this.$store.dispatch('fetchUser')
     this.moreDetails(this.id)
   },
 
@@ -93,7 +97,8 @@ export default {
 
   methods: {
     ...mapMutations(['updateMessage']),
-
+  
+    // additional info, search by game id
     moreDetails (id) {
       this.toggleLoader()
       axios
@@ -136,7 +141,8 @@ export default {
         })
         .catch(error => console.log(error))
     },
-
+    
+    // if it's not already added, add game to current user's list
     addToList () {
       db.collection('games')
         .where('gameId', '==', this.id)
@@ -168,20 +174,24 @@ export default {
 <style lang="scss" scoped>
 .detailsContainer {
   @include alignment($direction: column);
-  .fadeIn-enter-active {
-    animation: fadeIn 1s;
-  }
-  .fadeIn-leave-active {
-    animation: fadeIn 1s reverse;
-  }
+  transition: all 1s ease;
+
+    .detailsOverlay {
+    @include boxSize($width: 100%, $minHeight: 100vh);
+    top: 0;
+    left: 0;
+    position: fixed;
+    z-index: 2;
+    }
 
   .details {
+    z-index: 3;
     @include alignment($textAlign: left);
     @include boxSize($width: 100%);
     .mainGameInfo {
       @include alignment($direction: column);
       img {
-        @include boxSize($height: auto, $width: 200px);
+        @include boxSize($height: 100%, $width: 200px);
       }
 
       .expand-enter-active {

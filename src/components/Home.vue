@@ -2,7 +2,7 @@
   <div class="container center">
     <div class="formWrapper flex flexCenter pd1 mg2">
       <h2 class="mgb1">Search for games</h2>
-      <h5 class="mgb1">Login to add games to your list and mark favorites</h5>
+      <h5 class="mgb1">Login to manage your list</h5>
       <form class="search flex flexCenter">
         <input type="text" v-model="searchData" placeholder="Search..." ref="mainInput" autofocus/>
         <button @click.prevent="fetchData" class="searchBtn">
@@ -61,11 +61,9 @@ export default {
         )
         .then(response => {
           this.toggleLoader()
-          console.log(response)
           this.$store.dispatch('clearArr')
           let resultsArray = []
           if (response.data.results.length) {
-            console.log(response.data.results)
             this.hasResults = true
             response.data.results.forEach(d => resultsArray.push(d))
             this.$store.dispatch('catchResults', resultsArray)

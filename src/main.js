@@ -8,6 +8,7 @@ import { auth } from './firebaseConfig'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faAngleDoubleDown,
+  faAngleDoubleUp,
   faWindowClose,
   faTrashAlt,
   faHandPointUp,
@@ -20,7 +21,7 @@ import {
   faUser
 } from '@fortawesome/free-regular-svg-icons' */
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-library.add(faAngleDoubleDown, faWindowClose, faTrashAlt, faHandPointUp, faUser, faSignOutAlt, faSignInAlt, faSearch)
+library.add(faAngleDoubleDown, faAngleDoubleUp, faWindowClose, faTrashAlt, faHandPointUp, faUser, faSignOutAlt, faSignInAlt, faSearch)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 let VueScrollTo = require('vue-scrollto')
 Vue.use(VueAxios, axios)

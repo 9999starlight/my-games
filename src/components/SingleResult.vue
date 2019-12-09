@@ -125,9 +125,6 @@ export default {
         #fff 75%,
         rgba(255, 255, 255, 0) 100%
       );
-      -webkit-animation: lightmove 8s ease infinite;
-      -moz-animation: lightmove 8s ease infinite;
-      animation: lightmove 8s ease infinite;
     }
     @supports (-ms-ime-align: auto) {
       .btnDetails {

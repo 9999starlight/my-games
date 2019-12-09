@@ -24,7 +24,7 @@
       <button
         @click="addFavorite"
         :disabled="listItem.favorite"
-        class="btnFavorite"
+        class="btn btnFavorite"
         title="Mark as favorite"
       >
         Add to favorites

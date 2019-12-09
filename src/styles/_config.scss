@@ -7,13 +7,13 @@ $blackLead: #333;
 $turquoise: turquoise;
 $yellow: yellow;
 $darkPurple: rgba(33, 21, 43, 0.82);
-$turquoiseGradient: linear-gradient(229deg, #095e52, #8fc5c9, #7acec1);
+$turquoiseGradient: linear-gradient(229deg, #095e52, #417f84, #5eb5a7);
 
 // configs
 $shadowSmall: 3px 3px 6px rgba(35, 35, 36, 0.47);
 $shadowBox: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.801);
 $backConfig: no-repeat center center/cover;
-$sizes: 1, 1.5, 2, 3;
+$sizes: 1, 2, 3;
 
 // mixins
 @mixin boxSize($width: false, $height: false, $maxWidth: false, $maxHeight: false, $minHeight: false) {
@@ -102,6 +102,7 @@ $sizes: 1, 1.5, 2, 3;
   }
 }
 
+// background all
 @mixin background($filter, $url, $backConfig) {
   background: $filter, $url $backConfig;
 }

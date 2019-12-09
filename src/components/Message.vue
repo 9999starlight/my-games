@@ -15,7 +15,7 @@ export default {
   },
 
   methods: {
-    ...mapActions['messageTimeout']
+    ...mapActions(['messageTimeout'])
   }
 }
 </script>

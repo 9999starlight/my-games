@@ -18,16 +18,25 @@
             <p class="mgb1">
               <strong>Genre: </strong>{{ singleGameDetail.genre }}
             </p>
-            <button class="btn addBtn mgt1" @click="addToList" :disabled="user === null">Add to my list</button>
-            <p v-if="user === null" class= "message">{{ loginMessage }}</p>
+            <button
+              class="btn addBtn mgt1"
+              @click="addToList"
+              :disabled="user === null"
+            >
+              Add to my list
+            </button>
+            <p v-if="user === null" class="message">{{ loginMessage }}</p>
             <div class="messageWrapper">
-            <transition name="expand">
-              <Message
-                v-if="this.getMessage !== ''"
-              />
-            </transition>
+              <transition name="expand">
+                <Message v-if="this.getMessage !== ''" />
+              </transition>
             </div>
-            <a href="#nav" v-scroll-to="'#nav'" class="block hashLink">Back to top &nbsp;<font-awesome-icon :icon="['fa', 'hand-point-up']" font-size="15px"></font-awesome-icon></a>
+            <button class="hashLink block btnClose" @click="$emit('closingDetails')">
+              Close details &nbsp;<font-awesome-icon
+                :icon="['fa', 'angle-double-up']"
+                font-size="15px"
+              ></font-awesome-icon>
+            </button>
           </div>
         </div>
         <p class="additionalInfo">
@@ -97,7 +106,7 @@ export default {
 
   methods: {
     ...mapMutations(['updateMessage']),
-  
+
     // additional info, search by game id
     moreDetails (id) {
       this.toggleLoader()
@@ -141,7 +150,7 @@ export default {
         })
         .catch(error => console.log(error))
     },
-    
+
     // if it's not already added, add game to current user's list
     addToList () {
       db.collection('games')
@@ -150,7 +159,10 @@ export default {
         .get()
         .then(snapshot => {
           if (snapshot.docs.length) {
-            this.$store.commit('updateMessage', 'You have already added that item to your list!')
+            this.$store.commit(
+              'updateMessage',
+              'You have already added that item to your list!'
+            )
           } else {
             this.message = ''
             db.collection('games').add({
@@ -176,13 +188,13 @@ export default {
   @include alignment($direction: column);
   transition: all 1s ease;
 
-    .detailsOverlay {
+  .detailsOverlay {
     @include boxSize($width: 100%, $minHeight: 100vh);
     top: 0;
     left: 0;
     position: fixed;
     z-index: 2;
-    }
+  }
 
   .details {
     z-index: 3;
@@ -192,14 +204,6 @@ export default {
       @include alignment($direction: column);
       img {
         @include boxSize($height: 100%, $width: 200px);
-      }
-
-      .expand-enter-active {
-        animation: expand 0.6s;
-      }
-
-      .expand-leave-active {
-        animation: expand 0.6s reverse;
       }
     }
     strong {
@@ -219,6 +223,10 @@ export default {
       @include fonts($color: $white, $size: 1.1rem);
     }
 
+    .btnClose {
+      background-color: transparent;
+    }
+
     .additionalInfo {
       padding: 0.5rem 1rem;
       @include fonts($size: 0.8rem);
@@ -233,6 +241,10 @@ export default {
     .details {
       .mainGameInfo {
         @include alignment($direction: row);
+
+        .btnClose {
+          @include fonts($size: 1rem);
+        }
       }
 
       .additionalInfo {

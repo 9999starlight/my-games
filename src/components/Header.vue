@@ -55,7 +55,7 @@ export default {
 
   name: 'appHeader',
 
-  created() {
+  created () {
     if (auth.currentUser) {
       this.loggedIn = true
       this.currentUser = auth.currentUser.email
@@ -94,31 +94,26 @@ nav {
     align-self: center;
     background-image: -webkit-linear-gradient(
       left,
+      #996a6e 62.5%,
       white 25%,
       #fde071 37.5%,
       #ef9671,
-      #996a6e 62.5%,
+
       white 75%
     );
     background-image: linear-gradient(
-      90deg,
+      160deg,
       white 25%,
       #fde071 37.5%,
       #ef9671,
       #996a6e 62.5%,
       white 75%
     );
-    background-position: right center;
-    background-size: 400% auto;
     -webkit-background-clip: text;
     background-clip: text;
     color: rgb(62, 134, 134);
     -webkit-text-fill-color: rgba(117, 62, 134, 0.466);
     // text-fill-color: transparent;
-    transition: color 200ms linear;
-    -webkit-animation: lightmove 8s ease infinite;
-    -moz-animation: lightmove 8s ease infinite;
-    animation: lightmove 8s ease infinite;
   }
   ul {
     li {
@@ -157,7 +152,7 @@ nav {
 .active {
    border-bottom: 2px inset $turquoise;
    transition: ease-in-out;
-} 
+}
 
 @media (min-width: 400px) {
   nav {

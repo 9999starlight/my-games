@@ -1,23 +1,25 @@
 <template>
   <div class="gameListWrapper flex flexCenter">
-    <h2 class="mgb2">My List</h2>
+    <h1 class="mgb2">My List</h1>
     <div class="buttonWrapper flex flexCenter fullWidth mgb1">
       <button @click="sortByAbc" class="btn sortBtn">Sort A-Z</button>
       <button @click="sortByYear" class="btn sortBtn">Sort by Year</button>
     </div>
     <Loader v-if="isLoading" />
-    <div
-      class="gameList flex flexCenter fullWidth"
-      v-for="listItem in fetchedDatabase"
-      :key="listItem.dbId"
-    >
-      <ListItem v-bind:listItem="listItem" v-on:updating="getUpdatedData" />
-    </div>
+    <transition-group name="gameList" tag="div" style="width: 100%">
+      <div
+        class="gameList flex flexCenter fullWidth"
+        v-for="listItem in fetchedDatabase"
+        :key="listItem.dbId"
+      >
+        <ListItem v-bind:listItem="listItem" v-on:updating="getUpdatedData" />
+      </div>
+    </transition-group>
     <a href="#nav" v-scroll-to="'#nav'" class="block hashLink mgb2"
-        >Back to top &nbsp;<font-awesome-icon
-          :icon="['fa', 'hand-point-up']"
-          font-size="15px"
-        ></font-awesome-icon
+      >Back to top &nbsp;<font-awesome-icon
+        :icon="['fa', 'hand-point-up']"
+        font-size="15px"
+      ></font-awesome-icon
     ></a>
   </div>
 </template>
@@ -136,12 +138,42 @@ export default {
   @include alignment($direction: column);
   @include boxSize($width: 100%);
   margin: 1rem auto;
+  
+  h1 {
+    font-family: Lobster, Times, cursive;
+  }
+  .gameList {
+    transition: all 0.8s;
+  }
+
+  .gameList-enter, .gameList-leave-to {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  .gameList-enter-to {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .gameList-move {
+    opacity: 1;
+    transition: all 0.5s;
+  }
 
   .buttonWrapper {
     @include alignment($justify: space-evenly);
 
     .sortBtn {
-      background: linear-gradient(to bottom, rgb(120, 119, 128) 0%, rgb(59, 58, 68) 0%, rgb(130, 135, 161) 0%, rgb(65, 62, 66) 49%, rgb(62, 59, 63) 50%, rgb(140, 140, 156) 100%);
+      background: linear-gradient(
+        to bottom,
+        rgb(120, 119, 128) 0%,
+        rgb(59, 58, 68) 0%,
+        rgb(130, 135, 161) 0%,
+        rgb(65, 62, 66) 49%,
+        rgb(62, 59, 63) 50%,
+        rgb(140, 140, 156) 100%
+      );
       color: white;
       width: 120px;
       font-size: 0.8rem;
@@ -151,9 +183,9 @@ export default {
   }
 }
 
- @media (min-width: 996px) {
-    .gameListWrapper {
-      @include boxSize($maxWidth: 900px);
-    }
+@media (min-width: 996px) {
+  .gameListWrapper {
+    @include boxSize($maxWidth: 900px);
   }
+}
 </style>

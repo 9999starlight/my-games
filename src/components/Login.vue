@@ -1,68 +1,70 @@
 <template>
-<transition appear name="fadeIn">
-  <div class="loginContainer">
-    <div class="loginOverlay" @click="closeLogin"></div>
-    <div class="loginWrapper">
-      <div class="formWrapper">
-        <form class="loginForm flex">
-          <font-awesome-icon
-            :icon="['fa', 'window-close']"
-            class="close"
-            @click="closeLogin"
-            title="Close"
-          >
-          </font-awesome-icon>
-          <div class="formHeader flex flexCenter">
-            <h2 v-if="!showSignUp" class="mgb1">Login</h2>
-            <h2 v-else class="mgb1">Sign Up</h2>
-            <p v-if="!showSignUp">
-              Dont'have an account?
-              <span @click="toggleSignUp" class="signupLink">Sign Up</span>
-            </p>
-            <p v-if="showSignUp">
-              <span @click="toggleSignUp" class="signupLink"
-                >Switch to Login</span
-              >
-            </p>
-          </div>
-          <div class="formGroup">
-            <label for="email" class="block">Email</label>
-            <input type="email" v-model="email" id="email" />
-          </div>
-          <div class="formGroup">
-            <label for="password" class="block">Password</label>
-            <input type="password" v-model="password" id="password" />
-          </div>
-          <div class="messageWrapper">
-            <Message v-if="this.getMessage !== ''" />
-          </div>
-          <button
-            v-if="!showSignUp"
-            type="submit"
-            class="btn loginBtn"
-            @click.prevent="loginUser"
-          >
-            Login
-          </button>
-          <button
-            v-if="showSignUp"
-            type="submit"
-            class="btn signUpBtn"
-            @click.prevent="signUpUser"
-          >
-            Create Account
-          </button>
-        </form>
+  <transition appear name="fadeIn">
+    <div class="loginContainer">
+      <div class="loginOverlay" @click="closeLogin"></div>
+      <div class="loginWrapper">
+        <div class="formWrapper">
+          <form class="loginForm flex">
+            <font-awesome-icon
+              :icon="['fa', 'window-close']"
+              class="close"
+              @click="closeLogin"
+              title="Close"
+            >
+            </font-awesome-icon>
+            <div class="formHeader flex flexCenter">
+              <h2 v-if="!showSignUp" class="mgb1">Login</h2>
+              <h2 v-else class="mgb1">Sign Up</h2>
+              <p v-if="!showSignUp">
+                Dont'have an account?
+                <span @click="toggleSignUp" class="signupLink">Sign Up</span>
+              </p>
+              <p v-if="showSignUp">
+                <span @click="toggleSignUp" class="signupLink"
+                  >Switch to Login</span
+                >
+              </p>
+            </div>
+            <div class="formGroup">
+              <label for="email" class="block">Email</label>
+              <input type="email" v-model="email" id="email" />
+            </div>
+            <div class="formGroup">
+              <label for="password" class="block">Password</label>
+              <input type="password" v-model="password" id="password" />
+            </div>
+            <div class="messageWrapper">
+              <transition name="expand">
+                <p class="message" v-if="this.errorMessage !== ''">
+                  {{ errorMessage }}
+                </p>
+              </transition>
+            </div>
+            <button
+              v-if="!showSignUp"
+              type="submit"
+              class="btn loginBtn"
+              @click.prevent="loginUser"
+            >
+              Login
+            </button>
+            <button
+              v-if="showSignUp"
+              type="submit"
+              class="btn signUpBtn"
+              @click.prevent="signUpUser"
+            >
+              Create Account
+            </button>
+          </form>
+        </div>
       </div>
     </div>
-  </div>
   </transition>
 </template>
 
 <script>
-import { mapMutations, mapGetters } from 'vuex'
 import { auth } from '../firebaseConfig'
-import Message from './Message'
 
 export default {
   name: 'login',
@@ -70,20 +72,24 @@ export default {
     return {
       showSignUp: false,
       email: '',
-      password: ''
+      password: '',
+      errorMessage: '',
+      timeSet: null
     }
   },
 
-  components: {
-    Message
-  },
-
-  computed: {
-    ...mapGetters(['getMessage'])
+  beforeDestroy () {
+    clearTimeout(this.timeSet)
+    this.timeSet = null
   },
 
   methods: {
-    ...mapMutations(['updateMessage']),
+    updateMessage (mess) {
+      this.errorMessage = mess
+      this.timeSet = setTimeout(() => {
+        this.errorMessage = ''
+      }, 3500)
+    },
 
     // toggle login/sign up forms
     toggleSignUp () {
@@ -97,10 +103,7 @@ export default {
     validation () {
       const regEmail = /^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-Z]{2,5})$/
       if (!regEmail.test(this.email) || this.password.length < 6) {
-        this.$store.commit(
-          'updateMessage',
-          'Invalid e-mail or password, please try again!'
-        )
+        this.updateMessage('Invalid e-mail or password, please try again!')
         return false
       } else return true
     },
@@ -117,7 +120,7 @@ export default {
           })
           .catch(err => {
             console.log(err.message)
-            this.$store.commit('updateMessage', err.message)
+            this.updateMessage(err.message)
           })
       }
     },
@@ -133,7 +136,7 @@ export default {
           })
           .catch(err => {
             console.log(err.message)
-            this.$store.commit('updateMessage', err.message)
+            this.updateMessage(err.message)
           })
       }
     }

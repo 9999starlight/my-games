@@ -147,7 +147,6 @@ export default {
         rgba(8, 86, 61, 0.808) 54%,
         rgba(13, 105, 67, 0.836) 70% rgba(43, 181, 133, 0.849) 100%
       );
-      padding: 0.3rem;
       padding: 7px 25px;
       @include fonts($color: $white, $size: 0.8rem);
     }

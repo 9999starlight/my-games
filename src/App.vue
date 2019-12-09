@@ -18,7 +18,7 @@ export default {
 </script>
 
 <style lang="scss">
- @import url('https://fonts.googleapis.com/css?family=Monoton|Ubuntu|Lobster&display=swap');
+ @import url('https://fonts.googleapis.com/css?family=Monoton|Ubuntu&display=swap');
  @import './styles/global.scss';
 #app {
   /* @include background(radial-gradient(ellipse at center, rgba(0, 0, 0, 0.8) 0%, rgba(0,0,0,0.9) 100%), url('./assets/controller.jpg'), $backConfig); */

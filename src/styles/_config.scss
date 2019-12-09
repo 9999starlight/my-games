@@ -61,7 +61,7 @@ $sizes: 1, 2, 3;
 }
 
 // fonts
-@mixin fonts ($size: false, $color: false, $weight: false, $style: false, $family: false) {
+@mixin fonts ($size: false, $color: false, $weight: false, $style: false) {
   @if $size {
     font-size: $size;
   }
@@ -76,10 +76,6 @@ $sizes: 1, 2, 3;
 
   @if $style {
     font-style: $style;
-  }
-
-  @if $family {
-    font-family: $family;
   }
 }
 

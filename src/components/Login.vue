@@ -16,22 +16,23 @@
               <h2 v-if="!showSignUp" class="mgb1">Login</h2>
               <h2 v-else class="mgb1">Sign Up</h2>
               <p v-if="!showSignUp">
-                Dont'have an account?
+                Dont'have an account?&nbsp;
                 <span @click="toggleSignUp" class="signupLink">Sign Up</span>
               </p>
               <p v-if="showSignUp">
+                Already have an account?&nbsp;
                 <span @click="toggleSignUp" class="signupLink"
-                  >Switch to Login</span
+                  >Sign in</span
                 >
               </p>
             </div>
             <div class="formGroup">
               <label for="email" class="block">Email</label>
-              <input type="email" v-model="email" id="email" />
+              <input type="email" v-model="email" id="email" style="background-color: transparent;"/>
             </div>
             <div class="formGroup">
               <label for="password" class="block">Password</label>
-              <input type="password" v-model="password" id="password" />
+              <input type="password" v-model="password" id="password" style="background-color: transparent;"/>
             </div>
             <div class="messageWrapper">
               <transition name="expand">
@@ -241,7 +242,7 @@ export default {
     input {
       @include boxSize($width: 250px);
       padding: 0.3rem 0;
-      background-color: transparent;
+      // background-color: transparent;
       border-bottom: 1px solid darken($color: $turquoise, $amount: 20%);
       @include fonts(
         $size: 0.9rem,

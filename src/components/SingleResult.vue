@@ -79,6 +79,8 @@ export default {
   );
   border-radius: 30px 30px 0px 0px;
   border: 2px inset #f5e7f5;
+  box-shadow: $shadowBox;
+
   .singleResult {
     grid-template-columns: 3fr 5fr;
     grid-template-rows: 1fr 1fr 1fr 1fr 30px;
@@ -96,6 +98,7 @@ export default {
     .smallImage {
       @include boxSize($height: auto, $width: 80px);
       grid-area: smallImage;
+      box-shadow: $shadowSmall;
     }
     .gameInfo {
       grid-area: gameInfo;

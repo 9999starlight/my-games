@@ -138,9 +138,11 @@ export default {
   @include alignment($direction: column);
   @include boxSize($width: 100%);
   margin: 1rem auto;
-  
+
   h1 {
-    font-family: Lobster, Times, cursive;
+    // font-family: Lobster, Times, cursive;
+    @include fonts($color: darken($turquoise, 10%));
+    text-shadow: 1px 3px 0 #272727e0, 1px 13px 5px #242323f3;
   }
   .gameList {
     transition: all 0.8s;
@@ -174,9 +176,8 @@ export default {
         rgb(62, 59, 63) 50%,
         rgb(140, 140, 156) 100%
       );
-      color: white;
+      @include fonts($color: $white, $size: 0.8rem);
       width: 120px;
-      font-size: 0.8rem;
       padding: 10px 0;
       box-shadow: $shadowSmall;
     }

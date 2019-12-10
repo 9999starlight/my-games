@@ -12,7 +12,7 @@
               title="Close"
             >
             </font-awesome-icon>
-            <div class="formHeader flex flexCenter">
+            <div class="formHeader flex flexCenter mgt2">
               <h2 v-if="!showSignUp" class="mgb1">Login</h2>
               <h2 v-else class="mgb1">Sign Up</h2>
               <p v-if="!showSignUp">
@@ -28,11 +28,11 @@
             </div>
             <div class="formGroup">
               <label for="email" class="block">Email</label>
-              <input type="email" v-model="email" id="email" style="background-color: transparent;"/>
+              <input type="email" v-model="email" id="email" />
             </div>
             <div class="formGroup">
               <label for="password" class="block">Password</label>
-              <input type="password" v-model="password" id="password" style="background-color: transparent;"/>
+              <input type="password" v-model="password" id="password" />
             </div>
             <div class="messageWrapper">
               <transition name="expand">
@@ -89,7 +89,7 @@ export default {
       this.errorMessage = mess
       this.timeSet = setTimeout(() => {
         this.errorMessage = ''
-      }, 3500)
+      }, 4000)
     },
 
     // toggle login/sign up forms
@@ -201,10 +201,7 @@ export default {
 
   .formHeader {
     @include alignment($direction: column);
-
-    p {
-      color: darken($color: $turquoise, $amount: 25%);
-    }
+    color: darken($color: $turquoise, $amount: 25%);
     .signupLink {
       @include fonts($color: rgb(14, 92, 122), $weight: 700);
       cursor: pointer;
@@ -242,12 +239,19 @@ export default {
     input {
       @include boxSize($width: 250px);
       padding: 0.3rem 0;
-      // background-color: transparent;
+      background-color: transparent;
       border-bottom: 1px solid darken($color: $turquoise, $amount: 20%);
       @include fonts(
         $size: 0.9rem,
         $color: darken($color: $turquoise, $amount: 30%)
       );
+      -webkit-transition: all 2s ease-in-out;
+      transition: all 0.2s ease-in-out;
+      &:-webkit-autofill,
+      &:focus:-webkit-autofill {
+        box-shadow: 0 0 0 100px rgb(250, 255, 189) inset;
+        -webkit-box-shadow: 0 0 0 100px rgb(250, 255, 189) inset;
+      }
     }
   }
 }

@@ -6,7 +6,7 @@ const actions = {
   messageTimeout ({ commit }) {
     setTimeout(() => {
       commit('clearMessage')
-    }, 3000)
+    }, 2500)
   }
 }
 

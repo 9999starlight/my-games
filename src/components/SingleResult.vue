@@ -65,18 +65,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .singleResultWrapper {
-  background: linear-gradient(
-    to bottom right,
-    #000000d4 0%,
-    rgba(33, 21, 43, 0.82) 51%,
-    #000000cf 100%
-  );
-  background: -webkit-linear-gradient(
-    -45deg,
-    rgba(0, 0, 0, 0.849) 0%,
-    rgba(33, 21, 43, 0.82) 51%,
-    rgba(0, 0, 0, 0.795) 100%
-  );
+  background: $grayGradient;
   border-radius: 30px 30px 0px 0px;
   border: 2px inset #f5e7f5;
   box-shadow: $shadowBox;

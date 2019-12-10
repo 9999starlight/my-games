@@ -1,6 +1,6 @@
 <template>
   <div class="gameListWrapper flex flexCenter">
-    <h1 class="mgb2">My List</h1>
+    <h1>My List</h1>
     <div class="buttonWrapper flex flexCenter fullWidth mgb1">
       <button @click="sortByAbc" class="btn sortBtn">Sort A-Z</button>
       <button @click="sortByYear" class="btn sortBtn">Sort by Year</button>
@@ -137,12 +137,12 @@ export default {
 .gameListWrapper {
   @include alignment($direction: column);
   @include boxSize($width: 100%);
-  margin: 1rem auto;
+  margin: 0 auto;
 
   h1 {
-    // font-family: Lobster, Times, cursive;
     @include fonts($color: darken($turquoise, 10%));
     text-shadow: 1px 3px 0 #272727e0, 1px 13px 5px #242323f3;
+    margin: 2rem 0;
   }
   .gameList {
     transition: all 0.8s;

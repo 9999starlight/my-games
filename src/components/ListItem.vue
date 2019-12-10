@@ -98,13 +98,7 @@ export default {
   border-bottom: inset 2px $turquoise;
   border-top: inset 2px rgb(233, 238, 238);
   border-radius: 10px 40px 10px 40px;
-  background: linear-gradient(
-    to bottom,
-    #787780 0%,
-    #3b3a44 0%,
-    #8287a1 0%,
-    #3e3b3f 50%
-  );
+  background: $grayGradient;
   box-shadow: $shadowBox;
 
   .sectionDiv {
@@ -164,12 +158,12 @@ export default {
   .buttons {
     grid-area: buttons;
     .delete {
-      @include fonts($color: rgb(216, 15, 55), $size: 1.6rem);
+      @include fonts($color: #93102a, $size: 1.6rem);
       padding: 0.7rem 0;
-      text-shadow: 3px 3px 5px #000000;
+      filter: drop-shadow(2px 2px 5px #261f1f);
 
       &:hover {
-        filter: brightness(40%);
+        filter: brightness(150%);
       }
     }
   }

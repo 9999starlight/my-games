@@ -123,7 +123,7 @@ nav {
 
     .logBtn {
       background-color: transparent;
-      @include fonts($color: $turquoise);
+      @include fonts($color: lighten($turquoise, 15%));
     }
 
     .loginBtn {
@@ -140,10 +140,10 @@ nav {
 
 .userLinks {
   @include alignment($justify: space-between, $align: center);
-  @include fonts($size: 1rem, $color: $turquoise);
+  @include fonts($size: 1rem, $color: lighten($turquoise, 15%));
 
   .userIcon {
-    @include fonts($color: $turquoise);
+    @include fonts($color: lighten($turquoise, 15%));
     display: inline-block;
     margin-right: 0.2rem;
   }
@@ -159,7 +159,7 @@ nav {
     ul li,
     button,
     .logo {
-      @include fonts($size: 110%);
+      @include fonts($size: 108%);
     }
   }
 }

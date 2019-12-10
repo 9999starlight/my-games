@@ -86,6 +86,8 @@ export default {
   color: $white;
   @include boxSize($width: 100%);
   @include alignment($textAlign: center);
+  padding-bottom: 1rem;
+
   .formWrapper {
     @include alignment($direction: column, $textAlign: center);
     .typing {

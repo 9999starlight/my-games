@@ -6,7 +6,7 @@ import infoMessage from './modules/infoMessage'
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
-  strict: true,
+  // strict: true,
   modules: {
     gamesResults,
     infoMessage,

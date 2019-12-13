@@ -165,6 +165,10 @@ export default {
 
   .buttonWrapper {
     @include alignment($justify: space-evenly);
+    // edge support
+    @supports (-ms-ime-align: auto) {
+        @include alignment($justify: space-around);
+    }
 
     .sortBtn {
       background: linear-gradient(

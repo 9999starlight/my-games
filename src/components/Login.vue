@@ -28,11 +28,11 @@
             </div>
             <div class="formGroup">
               <label for="email" class="block">Email</label>
-              <input type="email" v-model="email" id="email" />
+              <input type="email" v-model.trim="email" id="email" />
             </div>
             <div class="formGroup">
               <label for="password" class="block">Password</label>
-              <input type="password" v-model="password" id="password" />
+              <input type="password" v-model.trim="password" id="password" />
             </div>
             <div class="messageWrapper">
               <transition name="expand">
@@ -188,6 +188,10 @@ export default {
   );
   color: darken($color: $turquoise, $amount: 30%);
   background-color: rgba(240, 242, 243, 0.658);
+  // edge support
+  @supports (-ms-ime-align: auto) {
+        @include alignment($justify: space-around);
+    }
 
   .close {
     @include fonts($size: 1.8rem, $color: rgba(68, 109, 126, 0.897));

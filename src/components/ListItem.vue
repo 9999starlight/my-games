@@ -71,15 +71,17 @@ export default {
 
     deleteItem () {
       let id = this.$refs['itemId'].id
-      db.collection('games')
-        .doc(id)
-        .delete()
-        .then(() => {
-          this.$emit('updating')
-        })
-        .catch(err => {
-          console.log(err.message)
-        })
+      if (confirm('Are you sure you want to delete this item?')) {
+        db.collection('games')
+          .doc(id)
+          .delete()
+          .then(() => {
+            this.$emit('updating')
+          })
+          .catch(err => {
+            console.log(err.message)
+          })
+      }
     }
   }
 }

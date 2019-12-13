@@ -120,8 +120,8 @@ export default {
     }
     @supports (-ms-ime-align: auto) {
       .btnDetails {
-        background: rgba(201, 135, 218, 0.445);
-        filter: brightness(80%);
+        background: $turquoiseGradient;
+        filter: brightness(90%);
       }
     }
   }
